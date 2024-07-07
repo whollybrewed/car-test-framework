@@ -1,0 +1,92 @@
+name: Master test pipeline
+
+on: [push]
+
+jobs:
+  stage_1:
+    name: Smoke test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+    - name: Execute stage 1
+      run: |
+          pip install pytest pytest-cov
+          pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+    - name: Update quarantine list
+      uses: actions/upload-artifact@v4
+      with:
+        name: quarantine list
+        path: quarantine.txt
+
+  stage_2:
+    name: acceptance_test
+    needs: stage_1
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+      - name: Get quarantine list
+        uses: actions/download-artifact@v4
+        with:
+          name: quarantine list
+      - name: Execute stage 2
+        run: |
+          pip install pytest pytest-cov
+          pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+      - name: Update quarantine list
+        uses: actions/upload-artifact@v4
+        with:
+          name: quarantine list
+          path: quarantine.txt
+
+  stage_3:
+    name: regression
+    needs: stage_2
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+      - name: Get quarantine list
+        uses: actions/download-artifact@v4
+        with:
+          name: quarantine list
+      - name: Execute stage 3
+        run: |
+          pip install pytest pytest-cov
+          pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+      - name: Update quarantine list
+        uses: actions/upload-artifact@v4
+        with:
+          name: quarantine list
+          path: quarantine.txt
