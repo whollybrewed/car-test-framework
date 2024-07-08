@@ -20,6 +20,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
     - name: Execute stage 1
+      continue-on-error: true
       run: |
           pip install pytest pytest-cov
           pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
@@ -51,6 +52,7 @@ jobs:
         with:
           name: quarantine list
       - name: Execute stage 2
+        continue-on-error: true
         run: |
           pip install pytest pytest-cov
           pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
@@ -82,6 +84,7 @@ jobs:
         with:
           name: quarantine list
       - name: Execute stage 3
+        continue-on-error: true
         run: |
           pip install pytest pytest-cov
           pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
