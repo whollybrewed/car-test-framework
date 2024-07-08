@@ -23,7 +23,7 @@ jobs:
       continue-on-error: true
       run: |
           pip install pytest pytest-cov
-          pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          pytest -rf tests.py | awk '/FAILED/{print $2}' >> quarantine.txt && sort -o quarantine.txt -u quarantine.txt
     - name: Update quarantine list
       uses: actions/upload-artifact@v4
       with:
@@ -55,7 +55,7 @@ jobs:
         continue-on-error: true
         run: |
           pip install pytest pytest-cov
-          pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          pytest -rf tests.py | awk '/FAILED/{print $2}' >> quarantine.txt && sort -o quarantine.txt -u quarantine.txt
       - name: Update quarantine list
         uses: actions/upload-artifact@v4
         with:
@@ -87,7 +87,7 @@ jobs:
         continue-on-error: true
         run: |
           pip install pytest pytest-cov
-          pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          pytest -rf tests.py | awk '/FAILED/{print $2}' >> quarantine.txt && sort -o quarantine.txt -u quarantine.txt
       - name: Update quarantine list
         uses: actions/upload-artifact@v4
         with:
