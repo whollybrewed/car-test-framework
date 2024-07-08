@@ -11,7 +11,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: ["3.10"]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
@@ -30,7 +30,7 @@ jobs:
         path: quarantine.txt
 
   stage_2:
-    name: acceptance_test
+    name: Acceptance test
     needs: stage_1
     runs-on: ${{ matrix.os }}
     strategy:
@@ -38,7 +38,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: ["3.10"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -61,7 +61,7 @@ jobs:
           path: quarantine.txt
 
   stage_3:
-    name: regression
+    name: Regression test
     needs: stage_2
     runs-on: ${{ matrix.os }}
     strategy:
@@ -69,7 +69,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: ["3.10"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
