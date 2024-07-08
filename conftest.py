@@ -1,6 +1,7 @@
 import pytest
 import glob
 
+qlist = []
 def pytest_collection_modifyitems(items):
     path = "quarantine*.txt"
     for filename in glob.glob(path):
