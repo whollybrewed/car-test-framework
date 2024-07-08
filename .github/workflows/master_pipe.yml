@@ -28,7 +28,7 @@ jobs:
     - name: Update quarantine list
       uses: actions/upload-artifact@v4
       with:
-        name: quarantine list
+        name: quarantine stage 1
         path: quarantine1.txt
 
   stage_2:
@@ -51,7 +51,7 @@ jobs:
       - name: Get quarantine list
         uses: actions/download-artifact@v4
         with:
-          name: quarantine list
+          name: quarantine stage 1
       - name: Execute stage 2
         continue-on-error: true
         run: |
@@ -61,7 +61,7 @@ jobs:
       - name: Update quarantine list
         uses: actions/upload-artifact@v4
         with:
-          name: quarantine list
+          name: quarantine stage 2
           path: quarantine2.txt
 
   stage_3:
@@ -84,7 +84,7 @@ jobs:
       - name: Get quarantine list
         uses: actions/download-artifact@v4
         with:
-          name: quarantine list
+          name: quarantine stage 2
       - name: Execute stage 3
         continue-on-error: true
         run: |
@@ -94,5 +94,5 @@ jobs:
       - name: Update quarantine list
         uses: actions/upload-artifact@v4
         with:
-          name: quarantine list
+          name: quarantine stage 3
           path: quarantine3.txt
