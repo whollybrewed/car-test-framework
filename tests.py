@@ -12,4 +12,4 @@ def test_answer_wright():
 
 @pytest.mark.regression
 def test_in_regression():
-    assert true
+    assert True
