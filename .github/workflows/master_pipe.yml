@@ -23,12 +23,13 @@ jobs:
       continue-on-error: true
       run: |
           pip install pytest pytest-cov
-          pytest -rf tests.py | awk '/FAILED/{print $2}' >> quarantine.txt && sort -o quarantine.txt -u quarantine.txt
+          pytest -rf tests.py | tee stage_1_report.txt
+          awk '/FAILED/{print $2}' stage_1_report.txt >> quarantine1.txt && sort -o quarantine1.txt -u quarantine1.txt
     - name: Update quarantine list
       uses: actions/upload-artifact@v4
       with:
         name: quarantine list
-        path: quarantine.txt
+        path: quarantine1.txt
 
   stage_2:
     name: Acceptance test
@@ -55,12 +56,13 @@ jobs:
         continue-on-error: true
         run: |
           pip install pytest pytest-cov
-          pytest -rf tests.py | awk '/FAILED/{print $2}' >> quarantine.txt && sort -o quarantine.txt -u quarantine.txt
+          pytest -rf tests.py | tee stage_2_report.txt
+          awk '/FAILED/{print $2}' stage_2_report.txt >> quarantine2.txt && sort -o quarantine2.txt -u quarantine2.txt
       - name: Update quarantine list
         uses: actions/upload-artifact@v4
         with:
           name: quarantine list
-          path: quarantine.txt
+          path: quarantine2.txt
 
   stage_3:
     name: Regression test
@@ -87,9 +89,10 @@ jobs:
         continue-on-error: true
         run: |
           pip install pytest pytest-cov
-          pytest -rf tests.py | awk '/FAILED/{print $2}' >> quarantine.txt && sort -o quarantine.txt -u quarantine.txt
+          pytest -rf tests.py | tee stage_3_report.txt
+          awk '/FAILED/{print $2}' stage_3_report.txt >> quarantine3.txt && sort -o quarantine3.txt -u quarantine3.txt
       - name: Update quarantine list
         uses: actions/upload-artifact@v4
         with:
           name: quarantine list
-          path: quarantine.txt
+          path: quarantine3.txt
