@@ -7,3 +7,7 @@ def test_answer_wrong():
 
 def test_answer_wright():
     assert inc(3) == 4
+    
+@pytest.mark.regression
+def test_in_regression()
+    assert true
