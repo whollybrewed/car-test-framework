@@ -49,9 +49,7 @@ def generate_report(req_objs):
         req_titles += [f"[{req_obj.id}]: {req_obj.description}\nRisk: {req_obj.risk}\n"]
     final_table = ""
     for i in range(len(report_data)):
-        # final_table += f"<br><strong>{req_titles[i]}</strong>"
         final_table += req_titles[i]
-        # table = tabulate(report_data[i], headers=header, tablefmt="html")
         table = tabulate(report_data[i], headers=header, tablefmt="pretty")
         final_table += table
         final_table += "\n\n"
