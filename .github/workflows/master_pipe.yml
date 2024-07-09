@@ -23,13 +23,17 @@ jobs:
       continue-on-error: true
       run: |
           pip install pytest pytest-cov
-          pytest -rf tests.py | tee stage_1_report.txt
+          pytest -rfp | tee stage_1_report.txt
           awk '/FAILED/{print $2}' stage_1_report.txt >> quarantine1.txt && sort -o quarantine1.txt -u quarantine1.txt
+          awk '/PASSED/{print $2}' stage_1_report.txt >> pass1.txt && sort -o pass1.txt -u pass1.txt
     - name: Update quarantine list
       uses: actions/upload-artifact@v4
       with:
-        name: quarantine stage 1
-        path: quarantine1.txt
+        name: Stage 1 artifact
+        path: |
+          stage_1_report.txt
+          quarantine1.txt
+          pass1.txt
 
   stage_2:
     name: Acceptance test
@@ -51,18 +55,22 @@ jobs:
       - name: Get quarantine list
         uses: actions/download-artifact@v4
         with:
-          name: quarantine stage 1
+          name: Stage 1 artifact
       - name: Execute stage 2
         continue-on-error: true
         run: |
           pip install pytest pytest-cov
-          pytest -m "not quarantine and not regression" -rf tests.py | tee stage_2_report.txt
+          pytest -m "not quarantine and not regression" -rfp | tee stage_2_report.txt
           awk '/FAILED/{print $2}' stage_2_report.txt >> quarantine2.txt && sort -o quarantine2.txt -u quarantine2.txt
+          awk '/PASSED/{print $2}' stage_2_report.txt >> pass2.txt && sort -o pass2.txt -u pass2.txt
       - name: Update quarantine list
         uses: actions/upload-artifact@v4
         with:
-          name: quarantine stage 2
-          path: quarantine2.txt
+          name: Stage 2 artifact
+          path: |
+            stage_2_report.txt
+            quarantine2.txt
+            pass2.txt
 
   stage_3:
     name: Regression test
@@ -84,15 +92,49 @@ jobs:
       - name: Get quarantine list
         uses: actions/download-artifact@v4
         with:
-          name: quarantine stage 2
+          name: Stage 2 artifact
       - name: Execute stage 3
         continue-on-error: true
         run: |
           pip install pytest pytest-cov
-          pytest -m "not quarantine and regression" -rf tests.py | tee stage_3_report.txt
+          pytest -m "not quarantine and regression" -rfp | tee stage_3_report.txt
           awk '/FAILED/{print $2}' stage_3_report.txt >> quarantine3.txt && sort -o quarantine3.txt -u quarantine3.txt
+          awk '/PASSED/{print $2}' stage_3_report.txt >> pass3.txt && sort -o pass3.txt -u pass3.txt
       - name: Update quarantine list
         uses: actions/upload-artifact@v4
         with:
-          name: quarantine stage 3
-          path: quarantine3.txt
+          name: Stage 3 artifact
+          path: |
+            stage_3_report.txt
+            quarantine3.txt
+            pass3.txt
+
+  report_generation:
+    name: Generate final report
+    needs: stage_3
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+           pip install tabulate
+      - name: Retrieve progress reports 
+        uses: actions/download-artifact@v4
+      - name: Generate final report
+        continue-on-error: true
+        run: |
+          python trace_manager.py
+        uses: actions/upload-artifact@v4
+        with:
+          name: Final report
+          path: |
+            report.txt

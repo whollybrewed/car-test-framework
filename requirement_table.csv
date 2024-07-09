@@ -1,0 +1,4 @@
+id,description,risk
+R001,need to boot,high
+R002,need to shutdown,low
+R005,nothing,medium
