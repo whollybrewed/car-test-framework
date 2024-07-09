@@ -89,7 +89,7 @@ class ReqObject:
         for tc in self.tcs:
             for stage_num in range(1, MAX_STAGE+1):
                 quarantine_list = file2list(f"quarantine{stage_num}.txt")
-                pass_list = quarantine_list = file2list(f"pass{stage_num}.txt")
+                pass_list = file2list(f"pass{stage_num}.txt")
                 if quarantine_list is not None:
                     if tc['nodeid'] in quarantine_list:
                         tc[f'stage{stage_num}'] = 'Quarantined'
