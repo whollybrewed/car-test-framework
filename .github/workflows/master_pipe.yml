@@ -129,6 +129,8 @@ jobs:
           pip install tabulate
       - name: Retrieve progress reports 
         uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
       - name: Generate final report
         continue-on-error: true
         run: |
