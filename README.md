@@ -2,7 +2,7 @@
 This demo test framework is constituted of three components:
 - [**Pipeline**](.github/workflows/master_pipe.yml): Defines the schedule and the scope of each test stage.
 - [**Traceability Management**](trace_manager.py): An automation tool that updates and maintains the requirement traceability matrix (RTM).
-- **Test runner**: pytest [config](conftest.py) and [test cases]((/tests)) 
+- **Test runner**: pytest [config](conftest.py) and [test cases](/tests)
 
 ```
 ┌──────────────────────────────┐                                                
@@ -35,3 +35,23 @@ The followings are considered business decisions, thus require human inputs:
 
 ### Report Matrix 
 A test report will be generated every time all stages have been performed. The report can be found as an artifact of job `Generate final report` under `Actions` -> `Master test pipeline`  
+
+Sample report:
+```
+[R001]: Sensor network interfaces should have minimal exposure
+Risk: Low
++------+----------------------------------------------------------------+---------+------------+------------+
+| TCID |                           Test Name                            | Stage 1 |  Stage 2   |  Stage 3   |
++------+----------------------------------------------------------------+---------+------------+------------+
+| T001 | tests/WI_perception/test_sensor_interface.py::test_port_access | Passed  |   Passed   | Not tested |
+| T002 |  tests/WI_perception/test_sensor_interface.py::test_port_scan  | Passed  | Not tested |   Passed   |
++------+----------------------------------------------------------------+---------+------------+------------+
+
+[R002]: Sensor must transmit with encrypted signal
+Risk: High
++------+--------------------------------------------------------------------+---------+---------+------------+
+| TCID |                             Test Name                              | Stage 1 | Stage 2 |  Stage 3   |
++------+--------------------------------------------------------------------+---------+---------+------------+
+| T003 | tests/WI_perception/test_signal_encryption.py::test_sensor_encrypt | Passed  | Passed  | Not tested |
++------+--------------------------------------------------------------------+---------+---------+------------+
+```
