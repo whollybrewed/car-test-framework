@@ -16,6 +16,7 @@ def file2list(file_path):
             lines = f.read().splitlines() 
         return lines
     except FileNotFoundError:
+        print(f"{file_path} not found")
         return None
 
 
