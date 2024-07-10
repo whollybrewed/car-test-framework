@@ -23,7 +23,7 @@ jobs:
       continue-on-error: true
       run: |
           pip install pytest pytest-cov
-          pytest -rfp | tee stage_1_report.txt
+          pytest -m "not regression" -rfp | tee stage_1_report.txt
           awk '/FAILED/{print $2}' stage_1_report.txt >> quarantine1.txt && sort -o quarantine1.txt -u quarantine1.txt
           awk '/PASSED/{print $2}' stage_1_report.txt >> pass1.txt && sort -o pass1.txt -u pass1.txt
     - name: Update quarantine list
