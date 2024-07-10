@@ -37,16 +37,29 @@ def generate_report(req_objs):
     req_titles = []
     for req_obj in req_objs:
         table_data = []
+        covered = 0
         tcs = req_obj.tcs
         for tc in tcs:
+            covered = covered + 1 \
+                if 'Passed' in tc['stage2'] or 'Passed' in tc['stage3'] \
+                else covered
             table_data.append([tc['tcid'],
                                tc['nodeid'],
                                tc['stage1'],
                                tc['stage2'],
                                tc['stage3']])
         report_data.append(table_data)
+        if len(tcs) == 0:
+            coverage = 0
+        else:
+            coverage = round(covered/len(tcs), 2)
+            cover_bar = '['
+        for i in range(1, 11):
+            cover_bar = cover_bar + '#' if i <= int(10 * coverage) else cover_bar + '_'
+        cover_bar += ']\n'
         header = ["TCID", "Test Name", "Stage 1", "Stage 2", "Stage 3"]
-        req_titles += [f"[{req_obj.id}]: {req_obj.description}\nRisk: {req_obj.risk}\n"]
+        title = f"[{req_obj.id}]: {req_obj.description}\nRisk: {req_obj.risk}\n"
+        req_titles += [title + f"Coverage = {100 * coverage}% " + cover_bar]
     final_table = ""
     for i in range(len(report_data)):
         final_table += req_titles[i]

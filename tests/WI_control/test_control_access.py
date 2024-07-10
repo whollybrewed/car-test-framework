@@ -23,10 +23,10 @@ def test_bad_auth():
     THEN: The system denies access
     """
     # To do
-    access_denied = True
+    access_denied = False
     assert access_denied
 
-def test_bad_auth():
+def test_user_control():
     """
     TC:T009
     REQ:R007
@@ -36,5 +36,5 @@ def test_bad_auth():
     THEN: The system should handover the control
     """
     # To do
-    manual_mode = True
+    manual_mode = False
     assert manual_mode
