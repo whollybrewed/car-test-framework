@@ -38,20 +38,22 @@ A test report will be generated every time all stages have been performed. The r
 
 Sample report:
 ```
-[R001]: Sensor network interfaces should have minimal exposure
-Risk: Low
-+------+----------------------------------------------------------------+---------+------------+------------+
-| TCID |                           Test Name                            | Stage 1 |  Stage 2   |  Stage 3   |
-+------+----------------------------------------------------------------+---------+------------+------------+
-| T001 | tests/WI_perception/test_sensor_interface.py::test_port_access | Passed  |   Passed   | Not tested |
-| T002 |  tests/WI_perception/test_sensor_interface.py::test_port_scan  | Passed  | Not tested |   Passed   |
-+------+----------------------------------------------------------------+---------+------------+------------+
-
-[R002]: Sensor must transmit with encrypted signal
+[R004]: Car must identify adversarial inputs with 99.99% success  
 Risk: High
-+------+--------------------------------------------------------------------+---------+---------+------------+
-| TCID |                             Test Name                              | Stage 1 | Stage 2 |  Stage 3   |
-+------+--------------------------------------------------------------------+---------+---------+------------+
-| T003 | tests/WI_perception/test_signal_encryption.py::test_sensor_encrypt | Passed  | Passed  | Not tested |
-+------+--------------------------------------------------------------------+---------+---------+------------+
+Coverage = 100.0% [##########]
++------+--------------------------------------------------------------+---------+------------+---------+
+| TCID |                          Test Name                           | Stage 1 |  Stage 2   | Stage 3 |
++------+--------------------------------------------------------------+---------+------------+---------+
+| T005 | tests/WI_decision/test_adverse_inputs.py::test_traffic_light | Passed  | Not tested | Passed  |
++------+--------------------------------------------------------------+---------+------------+---------+
+
+[R006]: Access to steering and brake must be authenticated
+Risk: High
+Coverage = 50.0% [#####_____]
++------+---------------------------------------------------------------+-------------+------------+------------+
+| TCID |                           Test Name                           |   Stage 1   |  Stage 2   |  Stage 3   |
++------+---------------------------------------------------------------+-------------+------------+------------+
+| T007 | tests/WI_control/test_control_access.py::test_access_auth_ask |   Passed    |   Passed   | Not tested |
+| T008 |    tests/WI_control/test_control_access.py::test_bad_auth     | Quarantined | Not tested | Not tested |
++------+---------------------------------------------------------------+-------------+------------+------------+
 ```
