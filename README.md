@@ -57,4 +57,3 @@ Coverage = 50.0% [#####_____]
 | T008 |    tests/WI_control/test_control_access.py::test_bad_auth     | Quarantined | Not tested | Not tested |
 +------+---------------------------------------------------------------+-------------+------------+------------+
 ```
-
